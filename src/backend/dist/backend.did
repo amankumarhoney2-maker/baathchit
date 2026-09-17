@@ -1,0 +1,233 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type Status = 
+ record {
+   author: principal;
+   createdAt: int;
+   id: nat;
+   image: opt ExternalBlob;
+   "text": text;
+ };
+type SendMessageInput = 
+ record {
+   conversationId: ConversationId;
+   replyTo: opt MessageId;
+   "text": text;
+ };
+type SavedReel = 
+ record {
+   reelId: nat;
+   savedAt: int;
+ };
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Reel = 
+ record {
+   caption: text;
+   commentCount: nat;
+   createdAt: int;
+   filename: text;
+   id: nat;
+   likeCount: nat;
+   saveCount: nat;
+   uploader: principal;
+   video: ExternalBlob;
+ };
+type Reaction = 
+ record {
+   author: principal;
+   emoji: text;
+ };
+type ReactInput = 
+ record {
+   emoji: text;
+   messageId: MessageId;
+ };
+type PublicProfile = 
+ record {
+   isPublic: bool;
+   profilePicture: opt ExternalBlob;
+   username: text;
+ };
+type Principal = principal;
+type MessageId = nat;
+type Message = 
+ record {
+   conversationId: ConversationId;
+   createdAt: int;
+   id: MessageId;
+   reactions: vec Reaction;
+   replyTo: opt MessageId;
+   sender: principal;
+   "text": text;
+ };
+type ExternalBlob = blob;
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type ConversationId = nat;
+type Conversation = 
+ record {
+   createdAt: int;
+   id: ConversationId;
+   participantA: principal;
+   participantB: principal;
+ };
+type Comment = 
+ record {
+   author: principal;
+   body: text;
+   createdAt: int;
+   id: nat;
+   reelId: nat;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type AuthProfile = 
+ record {
+   createdAt: int;
+   isPublic: bool;
+   password: text;
+   profilePicture: opt ExternalBlob;
+   username: text;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  /// Adds a comment to a reel as the caller.
+  addComment: (reelId: nat, body: text) -> (Comment);
+  /// Uploads a new reel with a caption. The video is stored via the
+  /// object-storage extension; only the external blob reference is kept here.
+  addReel: (caption: text, video: ExternalBlob, filename: text) -> (Reel);
+  /// Posts a status/note as the caller. `text` must be non-empty and at most
+  /// 280 characters. `image` is an optional external-blob reference produced by
+  /// the object-storage extension.
+  addStatus: ("text": text, image: opt ExternalBlob) -> (Status);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  /// Change the caller's password. Requires the current password to match;
+  /// returns false otherwise or when the caller has no profile.
+  changePassword: (currentPassword: text, newPassword: text) -> (bool);
+  /// Change the caller's username. Returns false when the new username is
+  /// already taken by another user or the caller has no profile.
+  changeUsername: (newUsername: text) -> (bool);
+  /// Deletes one of the caller's own statuses/notes.
+  deleteStatus: (id: nat) -> ();
+  execute: (qJson: text) -> (Result) query;
+  /// Static API documentation for the Baathchit backend. Authored from the
+  /// current source; read-only and returns no runtime state.
+  getApiDoc: () -> (text) query;
+  /// Fetch the caller's own profile (username/password) stored against their
+  /// Google account. Returns null when the caller has not registered yet.
+  getCallerProfile: () -> (opt AuthProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getOrCreateConversation: (other: principal) -> (Conversation);
+  /// Returns a single reel by id, if it exists.
+  getReel: (id: nat) -> (opt Reel) query;
+  /// Look up another user's public profile info (username, profile picture,
+  /// visibility). Returns null when the principal has no registered profile.
+  /// The frontend uses `isPublic` to decide whether to render that user's
+  /// principal ID: when false, the ID must be hidden everywhere in the app.
+  getUserProfile: ("principal": Principal) -> (opt PublicProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  /// Check whether a username is available for registration.
+  isUsernameAvailable: (username: text) -> (bool) query;
+  /// Likes a reel as the caller.
+  likeReel: (reelId: nat) -> ();
+  /// Returns the comments on a reel.
+  listComments: (reelId: nat) -> (vec Comment) query;
+  listConversations: () -> (vec Conversation) query;
+  /// Returns the reel IDs the caller has liked, so like state can be reflected
+  /// on feed load.
+  listLikedReels: () -> (vec nat) query;
+  listMessages: (conversationId: ConversationId) -> (vec Message) query;
+  /// Returns all reels in the feed, newest first.
+  listReels: () -> (vec Reel) query;
+  /// Returns the reels the caller has saved.
+  listSavedReels: () -> (vec SavedReel) query;
+  /// Returns a user's statuses/notes, newest first.
+  listStatusesByAuthor: (author: principal) -> (vec Status) query;
+  reactToMessage: (input: ReactInput) -> ();
+  /// Set a unique username and password for the caller's Google account.
+  /// Fails if the caller already has a profile or the username is taken.
+  registerUser: (username: text, password: text) -> (bool);
+  /// Saves a reel to the caller's collection.
+  saveReel: (reelId: nat) -> ();
+  schema: () -> (text) query;
+  sendMessage: (input: SendMessageInput) -> (Message);
+  /// Set the caller's profile picture (an external-blob reference produced by
+  /// the object-storage extension). Pass null to clear it.
+  setProfilePicture: (picture: opt ExternalBlob) -> (bool);
+  /// Toggle whether the caller's account is public (ID shown everywhere) or
+  /// private (ID hidden from other users).
+  setVisibility: (isPublic: bool) -> (bool);
+  /// Removes the caller's like from a reel.
+  unlikeReel: (reelId: nat) -> ();
+  /// Removes a reel from the caller's saved collection.
+  unsaveReel: (reelId: nat) -> ();
+}

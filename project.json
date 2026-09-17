@@ -1,0 +1,20 @@
+{
+  "overview": "A social app for sharing short videos, posting statuses and notes, and chatting one-on-one.",
+  "features": [
+    "Watch a vertical feed of short videos",
+    "Upload reels with captions",
+    "Post text statuses and notes with optional images",
+    "Like, comment, and save reels",
+    "One-on-one chat with replies and reactions",
+    "Profile with uploaded and saved reels"
+  ],
+  "category": "social",
+  "tags": [
+    "social",
+    "video",
+    "chat",
+    "reels",
+    "status"
+  ],
+  "last_updated": "2026-09-17T04:06:56.272Z"
+}

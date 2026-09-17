@@ -1,0 +1,284 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__386906547<Principal, UserRole__91647283>
+  };
+type AuthProfile__188797227 =
+  {
+    createdAt : Int;
+    isPublic : Bool;
+    password : Text;
+    profilePicture : ?Blob;
+    username : Text
+  };
+type AuthProfile__342165875 =
+  {
+    createdAt : Int;
+    isPublic : Bool;
+    password : Text;
+    profilePicture : ?Blob;
+    username : Text
+  };
+type AuthProfile__887546028 =
+  {
+    createdAt : Int;
+    isPublic : Bool;
+    password : Text;
+    profilePicture : ?ExternalBlob__220559234;
+    username : Text
+  };
+type Comment__440199994 =
+  {author : Principal; body : Text; createdAt : Int; id : Nat; reelId : Nat};
+type Comment__762677380 =
+  {author : Principal; body : Text; createdAt : Int; id : Nat; reelId : Nat};
+type Comment__88221167 =
+  {author : Principal; body : Text; createdAt : Int; id : Nat; reelId : Nat};
+type ConversationId__147913217 = Nat;
+type Conversation__225613708 =
+  {
+    createdAt : Int;
+    id : Nat;
+    participantA : Principal;
+    participantB : Principal
+  };
+type Conversation__686238356 =
+  {
+    createdAt : Int;
+    id : ConversationId__147913217;
+    participantA : Principal;
+    participantB : Principal
+  };
+type Conversation__984644271 =
+  {
+    createdAt : Int;
+    id : Nat;
+    participantA : Principal;
+    participantB : Principal
+  };
+type Data__265875254<K, V> = {var count : Nat__58649523; kvs : [var ?(K, V)]};
+type Data__859131645<T> = {var count : Nat__58649523; elements : [var ?T]};
+type ExternalBlob__220559234 = Blob;
+type Internal__161573640<K, V> =
+  {children : [var ?Node__430031793<K, V>]; data : Data__265875254<K, V>};
+type Internal__778364379<T> =
+  {children : [var ?Node__1045371124<T>]; data : Data__859131645<T>};
+type Leaf__1045638083<K, V> = {data : Data__265875254<K, V>};
+type Leaf__776840865<T> = {data : Data__859131645<T>};
+type List__1004628775<T> =
+  {
+    var blockIndex : Nat__58649523;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__58649523
+  };
+type List__89170296<T> = List__1004628775<T>;
+type Map__13625999<K, V> =
+  {var root : Node__430031793<K, V>; var size : Nat__58649523};
+type Map__386906547<K, V> = Map__670138087<K, V>;
+type Map__670138087<K, V> = Map__13625999<K, V>;
+type MessageId__810287564 = Nat;
+type Message__363787956 =
+  {
+    conversationId : Nat;
+    createdAt : Int;
+    id : Nat;
+    reactions : [Reaction__1028632455];
+    replyTo : ?Nat;
+    sender : Principal;
+    text : Text
+  };
+type Message__407885666 =
+  {
+    conversationId : Nat;
+    createdAt : Int;
+    id : Nat;
+    reactions : [Reaction__38463275];
+    replyTo : ?Nat;
+    sender : Principal;
+    text : Text
+  };
+type Message__454780518 =
+  {
+    conversationId : ConversationId__147913217;
+    createdAt : Int;
+    id : MessageId__810287564;
+    reactions : [Reaction__248509560];
+    replyTo : ?MessageId__810287564;
+    sender : Principal;
+    text : Text
+  };
+type Nat__58649523 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__665018719 =
+  {
+    accessControlState : AccessControlState__201339279;
+    chatState : {var nextConversationId : Nat; var nextMessageId : Nat};
+    comments : Map__386906547<Nat, List__89170296<Comment__440199994>>;
+    conversationByPair : Map__386906547<Text, Nat>;
+    conversations : Map__386906547<Nat, Conversation__984644271>;
+    likes : Map__386906547<Nat, Set__195681557<Principal>>;
+    messages : Map__386906547<Nat, List__89170296<Message__407885666>>;
+    profiles : Map__386906547<Principal, AuthProfile__188797227>;
+    reels : Map__386906547<Nat, Reel__427815532>;
+    saved : Map__386906547<Principal, List__89170296<SavedReel__1060315066>>;
+    state : {var nextCommentId : Nat; var nextReelId : Nat};
+    statusState : {var nextStatusId : Nat};
+    statuses : Map__386906547<Nat, Status__788555775>;
+    usernames : Map__386906547<Text, Principal>
+  };
+type NewActor__937507792 =
+  {
+    accessControlState : AccessControlState__201339279;
+    chatState : {var nextConversationId : Nat; var nextMessageId : Nat};
+    comments : Map__386906547<Nat, List__89170296<Comment__88221167>>;
+    conversationByPair : Map__386906547<Text, Nat>;
+    conversations : Map__386906547<Nat, Conversation__225613708>;
+    likes : Map__386906547<Nat, Set__195681557<Principal>>;
+    messages : Map__386906547<Nat, List__89170296<Message__363787956>>;
+    profiles : Map__386906547<Principal, AuthProfile__342165875>;
+    reels : Map__386906547<Nat, Reel__370950465>;
+    saved : Map__386906547<Principal, List__89170296<SavedReel__165350098>>;
+    state : {var nextCommentId : Nat; var nextReelId : Nat};
+    usernames : Map__386906547<Text, Principal>
+  };
+type Node__1045371124<T> =
+  {#internal : Internal__778364379<T>; #leaf : Leaf__776840865<T>};
+type Node__430031793<K, V> =
+  {#internal : Internal__161573640<K, V>; #leaf : Leaf__1045638083<K, V>};
+type OldActor__358288849 =
+  {
+    accessControlState : AccessControlState__201339279;
+    chatState : {var nextConversationId : Nat; var nextMessageId : Nat};
+    comments : Map__386906547<Nat, List__89170296<Comment__440199994>>;
+    conversationByPair : Map__386906547<Text, Nat>;
+    conversations : Map__386906547<Nat, Conversation__984644271>;
+    likes : Map__386906547<Nat, Set__195681557<Principal>>;
+    messages : Map__386906547<Nat, List__89170296<Message__407885666>>;
+    profiles : Map__386906547<Principal, AuthProfile__188797227>;
+    reels : Map__386906547<Nat, Reel__427815532>;
+    saved : Map__386906547<Principal, List__89170296<SavedReel__1060315066>>;
+    state : {var nextCommentId : Nat; var nextReelId : Nat};
+    usernames : Map__386906547<Text, Principal>
+  };
+type OldActor__606090735 = {};
+type Reaction__1028632455 = {author : Principal; emoji : Text};
+type Reaction__248509560 = {author : Principal; emoji : Text};
+type Reaction__38463275 = {author : Principal; emoji : Text};
+type Reel__370950465 =
+  {
+    caption : Text;
+    commentCount : Nat;
+    createdAt : Int;
+    filename : Text;
+    id : Nat;
+    likeCount : Nat;
+    saveCount : Nat;
+    uploader : Principal;
+    video : Blob
+  };
+type Reel__427815532 =
+  {
+    caption : Text;
+    commentCount : Nat;
+    createdAt : Int;
+    filename : Text;
+    id : Nat;
+    likeCount : Nat;
+    saveCount : Nat;
+    uploader : Principal;
+    video : Blob
+  };
+type Reel__790301563 =
+  {
+    caption : Text;
+    commentCount : Nat;
+    createdAt : Int;
+    filename : Text;
+    id : Nat;
+    likeCount : Nat;
+    saveCount : Nat;
+    uploader : Principal;
+    video : ExternalBlob__220559234
+  };
+type SavedReel__1060315066 = {reelId : Nat; savedAt : Int};
+type SavedReel__165350098 = {reelId : Nat; savedAt : Int};
+type SavedReel__184009317 = {reelId : Nat; savedAt : Int};
+type Set__195681557<T> = Set__29061695<T>;
+type Set__29061695<T> =
+  {var root : Node__1045371124<T>; var size : Nat__58649523};
+type Status__788555775 =
+  {author : Principal; createdAt : Int; id : Nat; image : ?Blob; text : Text};
+type Status__875540124 =
+  {
+    author : Principal;
+    createdAt : Int;
+    id : Nat;
+    image : ?ExternalBlob__220559234;
+    text : Text
+  };
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20260915_000000" : (_old : OldActor__606090735) -> NewActor__937507792;
+  "20260917_000000" : (old : OldActor__358288849) -> NewActor__665018719
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__386906547<Principal, UserRole__91647283>
+    };
+  stable chatState : {var nextConversationId : Nat; var nextMessageId : Nat};
+  stable comments :
+    {
+      var root : Node__430031793<Nat, List__89170296<Comment__762677380>>;
+      var size : Nat__58649523
+    };
+  stable conversationByPair :
+    {
+      var root : Node__430031793<Text, ConversationId__147913217>;
+      var size : Nat__58649523
+    };
+  stable conversations :
+    {
+      var root :
+        Node__430031793<ConversationId__147913217, Conversation__686238356>;
+      var size : Nat__58649523
+    };
+  stable likes :
+    {
+      var root : Node__430031793<Nat, Set__195681557<Principal>>;
+      var size : Nat__58649523
+    };
+  stable messages :
+    {
+      var root :
+        Node__430031793<ConversationId__147913217,
+                         List__89170296<Message__454780518>>;
+      var size : Nat__58649523
+    };
+  stable profiles :
+    {
+      var root : Node__430031793<Principal, AuthProfile__887546028>;
+      var size : Nat__58649523
+    };
+  stable reels :
+    {
+      var root : Node__430031793<Nat, Reel__790301563>;
+      var size : Nat__58649523
+    };
+  stable saved :
+    {
+      var root :
+        Node__430031793<Principal, List__89170296<SavedReel__184009317>>;
+      var size : Nat__58649523
+    };
+  stable state : {var nextCommentId : Nat; var nextReelId : Nat};
+  stable statusState : {var nextStatusId : Nat};
+  stable statuses :
+    {
+      var root : Node__430031793<Nat, Status__875540124>;
+      var size : Nat__58649523
+    };
+  stable usernames :
+    {var root : Node__430031793<Text, Principal>; var size : Nat__58649523}
+};
